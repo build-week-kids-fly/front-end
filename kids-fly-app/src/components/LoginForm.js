@@ -21,7 +21,8 @@ export default class LoginForm extends React.Component {
   handleChange = (event) => {
 		this.setState({
 			[event.target.name]: event.target.value
-		})
+    })
+    console.log(this.state)
   }
   
   // this method takes the login info, gathered by the form
@@ -32,15 +33,18 @@ export default class LoginForm extends React.Component {
     const { email, password } = this.state
 
     axios
-      .post(address, {
+      // the login endpoint may be "GET" not "POST"
+      .get(address, {
         email: email, 
         password: password,
       })
       .then(response => {
         console.log(response)
-        localStorage.setItem("token", response.data.token)
+        // localStorage.setItem("token", response.data.token)
       })
-      .catch(err => {console.log(err)})
+      .catch(err => {
+        console.log(err)
+      })
   }
   // the return value should include the token
   // if login is unsuccessful, the form should be displayed again
@@ -60,7 +64,7 @@ export default class LoginForm extends React.Component {
 				<p>{errorMessage}</p>
 
 				<input type="text" name="email" placeholder="Email" value={email} onChange={this.handleChange} />
-				<input type="password" name="password" placeholder="Password" value={password} onChange={this.handleChange} />
+				<input type="text" name="password" placeholder="Password" value={password} onChange={this.handleChange} />
 
 				<button type="submit">Submit</button>
 			</form>
