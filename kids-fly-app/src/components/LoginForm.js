@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 
-import KIDSFLY_API from '../App'
+// import KIDSFLY_API from '../App'
 
 // this component will store the login info from user input
 // and send it to the login server, receiving a token or an error message
@@ -29,22 +29,27 @@ export default class LoginForm extends React.Component {
   // and stored in state, and sends it to the login server, 
   // receiving in response a token or an error message
   login = () => {
-    const address = KIDSFLY_API + "/login"
     const { email, password } = this.state
 
     axios
-      // the login endpoint may be "GET" not "POST"
-      .get(address, {
-        email: email, 
-        password: password,
+      // logs in user, response should include some sort of token to set in memory.
+      //first POST points to deployed URL, Second POST points to local server
+      .post("https://kidsflyapp.herokuapp.com/login", {
+      // .post("http://localhost:9966/login", {
+        email: email,
+        password: password
       })
       .then(response => {
-        console.log(response)
-        // localStorage.setItem("token", response.data.token)
+        const token = response.data.token;
+        const returnData = JSON.stringify(response.data);
+        console.log(returnData)
+        // JWT - JSON WEB TOKEN
+        localStorage.setItem("token", token);
+        // saves a token in the browsers local memory.
       })
       .catch(err => {
-        console.log(err)
-      })
+        console.log(err);
+      });
   }
   // the return value should include the token
   // if login is unsuccessful, the form should be displayed again
@@ -58,7 +63,8 @@ export default class LoginForm extends React.Component {
     const { email, password, errorMessage } = this.state
 
     return (
-      <form onSubmit={this.login}>
+      <div>
+      {/* <form onSubmit={this.login}> */}
 				<h2>Login</h2>
 
 				<p>{errorMessage}</p>
@@ -66,8 +72,9 @@ export default class LoginForm extends React.Component {
 				<input type="text" name="email" placeholder="Email" value={email} onChange={this.handleChange} />
 				<input type="text" name="password" placeholder="Password" value={password} onChange={this.handleChange} />
 
-				<button type="submit">Submit</button>
-			</form>
+			{/* </form> */}
+				<button onClick={this.login}>Submit</button>
+      </div>
     )
   }
 }

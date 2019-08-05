@@ -10,15 +10,15 @@ function App() {
     axios
       // logs in user, response should include some sort of token to set in memory.
       //first POST points to deployed URL, Second POST points to local server
-      //.post("https://kidsflyapp.herokuapp.com/login", {
-      .post("http://localhost:9966/login", {
+      .post("https://kidsflyapp.herokuapp.com/login", {
+      // .post("http://localhost:9966/login", {
         email: "Admin",
         password: "Admin"
       })
       .then(response => {
         const token = response.data.token;
         const returnData = JSON.stringify(response.data);
-        alert(returnData)
+        console.log(returnData)
         // JWT - JSON WEB TOKEN
         localStorage.setItem("token", token);
         // saves a token in the browsers local memory.
